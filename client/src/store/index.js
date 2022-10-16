@@ -204,6 +204,81 @@ export const useGlobalStore = () => {
         });
     }
 
+    //ADDED This function creates a playlist
+    // store.createNewList = function () {
+    //     // GET THE LIST
+    //     async function asyncCreateNewList(id) {
+    //         let response = await api.getPlaylistById(id);
+    //         if (response.data.success) {
+    //             let playlist = response.data.playist;
+    //             playlist.name = newName;
+    //             async function updateList(playlist) {
+    //                 response = await api.updatePlaylistById(playlist._id, playlist);
+    //                 if (response.data.success) {
+    //                     async function getListPairs(playlist) {
+    //                         response = await api.getPlaylistPairs();
+    //                         if (response.data.success) {
+    //                             let pairsArray = response.data.idNamePairs;
+    //                             storeReducer({
+    //                                 type: GlobalStoreActionType.CHANGE_LIST_NAME,
+    //                                 payload: {
+    //                                     idNamePairs: pairsArray,
+    //                                     playlist: playlist
+    //                                 }
+    //                             });
+    //                         }
+    //                     }
+    //                     getListPairs(playlist);
+    //                 }
+    //             }
+    //             updateList(playlist);
+    //         }
+    //     }
+    //     asyncCreateNewList(id);
+    // }
+
+    //ADDED This function creates a new list
+    store.createNewList = function () {
+        async function asyncCreateNewList() {
+            const playlist = { name: "Untitled", songs: [] };
+            const response = await api.createPlaylist(playlist);
+            if (response.data.success) {
+                let newList = response.data.playlist;
+                storeReducer({
+                    type: GlobalStoreActionType.CREATE_NEW_LIST,
+                    payload: newList
+                }
+                );
+
+                // IF IT'S A VALID LIST THEN LET'S START EDITING IT
+                store.history.push("/playlist/" + newList._id);
+            }
+            else {
+                console.log("API FAILED TO CREATE A NEW LIST");
+            }
+        }
+        asyncCreateNewList();
+    }
+
+      // THIS FUNCTION ADDS A NEW PLAYLIST
+//   store.createNewList = () => {
+//     const playlist = { name: 'untitled', songs: [] };
+//     const asyncCreateNewList = async () => {
+//       const response = await api.createPlaylist(playlist);
+//       if (response.data.success) {
+//         let playlist = response.data.playlist;
+//         if (response.data.success) {
+//           storeReducer({
+//             type: GlobalStoreActionType.SET_CURRENT_LIST,
+//             payload: playlist,
+//           });
+//           store.history.push('/playlist/' + playlist._id);
+//         }
+//       }
+//     };
+//     asyncCreateNewList();
+//   };
+
     // THIS GIVES OUR STORE AND ITS REDUCER TO ANY COMPONENT THAT NEEDS IT
     return { store, storeReducer };
 }
