@@ -129,46 +129,44 @@ updatePlaylistById = async (req, res) => {
     //Not sure if this breaks anything
     const playlist = new Playlist(body);
 
-    if (!body.name) {
+    // if (!body.name) {
+    if (!body) {
         return res.status(400).json({
             success: false,
-            error: 'You must provide a new name',
-        });
+            error: 'You must provide a body to update',
+        })
+        // return res.status(400).json({
+        //     success: false,
+        //     error: 'You must provide a new name',
+        // });
     }
 
-    console.log("Trying to update by Id.")
     Playlist.findOne({ _id: req.params.id }, (err, Playlist) => {
-        // console.log("Got into the findOne.")
         if (err) {
             return res.status(404).json({
                 err,
-                message: 'Playlist with id not found',
+                message: 'Playlist with id not found!',
             })
         }
-
-        Playlist.name = req.body.name
-
+        Playlist.name = body.name;
+        Playlist.songs = body.songs;
         Playlist
             .save()
             .then(() => {
-                console.log("SUCCESS!!!");
+                console.log("Success updating song!!!");
                 return res.status(200).json({
                     success: true,
-                    playlist: playlist,
-                    message: 'Playlist name updated!',
+                    id: Playlist._id,
+                    message: 'Playlist updated!',
                 })
             })
             .catch(error => {
-                console.log("FAILURE: " + JSON.stringify(error));
+                console.log("Failure: " + JSON.stringify(error));
                 return res.status(404).json({
-                    error,
-                    message: 'Playlist name not updated!',
+                    error: "Failed to update playlist",
+                    message: 'Playlist not updated!',
                 })
             })
-
-        // return
-
-
     })
 
     // Playlist.findByIdAndUpdate(req.params.id, {

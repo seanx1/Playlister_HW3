@@ -398,7 +398,8 @@ export const useGlobalStore = () => {
                 console.log(response.data.playlist);
                 storeReducer({
                     type: GlobalStoreActionType.SET_CURRENT_LIST,
-                    payload: response.data.playlist,
+                    // payload: response.data.playlist,
+                    payload: playlist
                 });
             }
         }
@@ -438,7 +439,8 @@ export const useGlobalStore = () => {
                 console.log(response.data.playlist);
                 storeReducer({
                     type: GlobalStoreActionType.SET_CURRENT_LIST,
-                    payload: response.data.playlist,
+                    // payload: response.data.playlist,
+                    payload: playlist
                 });
             }
         }

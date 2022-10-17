@@ -14,8 +14,9 @@ function EditToolbar() {
     let enabledButtonClass = "playlister-button";
 
     //ADDED This to handle adding song
-    const handleAddSong = () => {
+    const handleAddSong = (event) => {
         store.addSong('Untitled', 'Unknown', 'dQw4w9WgXcQ');
+        event.stopPropagation();
     };
     
     function handleUndo() {

@@ -11,10 +11,16 @@ import { GlobalStoreContext } from '../store'
 function PlaylistCards() {
     const { store } = useContext(GlobalStoreContext);
     store.history = useHistory();
+    //? : 
+    function returntoHomePage() {
+        store.history.push('/');
+        return '';
+    }
 
     return (
         <div id="playlist-cards">
         {
+            (store.currentList != null) ?
             store.currentList.songs.map((song, index) => (
                 <SongCard
                     id={'playlist-song-' + (index)}
@@ -23,6 +29,8 @@ function PlaylistCards() {
                     song={song}
                 />
             ))
+            :
+            returntoHomePage()
         }
         </div>
     )
