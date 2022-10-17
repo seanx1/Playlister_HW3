@@ -31,6 +31,7 @@ function ListCard(props) {
         let id = event.target.id.substring('delete-list-'.length);
         console.log('The ID of the card to be deleted is: ' + id);
         store.deletePlaylist(id);
+        event.stopPropagation();
     };
 
     function handleToggleEdit(event) {
