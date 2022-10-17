@@ -116,7 +116,7 @@ export const useGlobalStore = () => {
         async function asyncChangeListName(id) {
             let response = await api.getPlaylistById(id);
             if (response.data.success) {
-                let playlist = response.data.playist;
+                let playlist = response.data.playists;
                 playlist.name = newName;
                 async function updateList(playlist) {
                     response = await api.updatePlaylistById(playlist._id, playlist);
@@ -186,7 +186,7 @@ export const useGlobalStore = () => {
         }
         asyncSetCurrentList(id);
     }
-    store.getPlaylistSize = function() {
+    store.getPlaylistSize = function () {
         return store.currentList.songs.length;
     }
     store.undo = function () {
@@ -204,7 +204,7 @@ export const useGlobalStore = () => {
         });
     }
 
-    //ADDED This function creates a playlist
+    //ADDED This function creates a playlist Copied and pasted from change list name
     // store.createNewList = function () {
     //     // GET THE LIST
     //     async function asyncCreateNewList(id) {
@@ -260,24 +260,116 @@ export const useGlobalStore = () => {
         asyncCreateNewList();
     }
 
-      // THIS FUNCTION ADDS A NEW PLAYLIST
-//   store.createNewList = () => {
-//     const playlist = { name: 'untitled', songs: [] };
-//     const asyncCreateNewList = async () => {
-//       const response = await api.createPlaylist(playlist);
-//       if (response.data.success) {
-//         let playlist = response.data.playlist;
-//         if (response.data.success) {
-//           storeReducer({
-//             type: GlobalStoreActionType.SET_CURRENT_LIST,
-//             payload: playlist,
-//           });
-//           store.history.push('/playlist/' + playlist._id);
-//         }
-//       }
-//     };
-//     asyncCreateNewList();
-//   };
+    // THIS FUNCTION ADDS A NEW PLAYLIST
+    //   store.createNewList = () => {
+    //     const playlist = { name: 'untitled', songs: [] };
+    //     const asyncCreateNewList = async () => {
+    //       const response = await api.createPlaylist(playlist);
+    //       if (response.data.success) {
+    //         let playlist = response.data.playlist;
+    //         if (response.data.success) {
+    //           storeReducer({
+    //             type: GlobalStoreActionType.SET_CURRENT_LIST,
+    //             payload: playlist,
+    //           });
+    //           store.history.push('/playlist/' + playlist._id);
+    //         }
+    //       }
+    //     };
+    //     asyncCreateNewList();
+    //   }; 
+
+    // store.deletePlaylist = (id) => {
+    //     // GET THE LIST
+    //     async function asyncDeletePlaylist(id) {
+    //         let response = await api.getPlaylistById(id);
+    //         let playlist = response.data.playlist;
+    //         if (response.data.success) {
+    //             storeReducer({
+    //                 type: GlobalStoreActionType.MARK_LIST_FOR_DELETION,
+    //                 payload: {},
+    //             });
+    //             async function deleteList(playlist) {
+    //                 response = await api.deletePlaylistById(playlist._id);
+    //                 if (response.data.success) {
+    //                     async function getListPairs(playlist) {
+    //                         response = await api.getPlaylistPairs();
+    //                         if (response.data.success) {
+    //                             let pairsArray = response.data.idNamePairs;
+    //                             storeReducer({
+    //                                 type: GlobalStoreActionType.CHANGE_LIST_NAME,
+    //                                 payload: {
+    //                                     idNamePairs: pairsArray,
+    //                                     playlist: playlist,
+    //                                 },
+    //                             });
+    //                         }
+    //                     }
+    //                     getListPairs(playlist);
+    //                 }
+    //             }
+    //             deleteList(playlist);
+    //         }
+    //     }
+    //     asyncDeletePlaylist(id);
+    // };
+
+    // store.deletePlaylist = (id) => {
+    //     // GET THE LIST
+    //     async function asyncDeletePlaylist(id) {
+    //         let response = await api.getPlaylistById(id);
+    //         let playlist = response.data.playlist;
+    //         if (response.data.success) {
+    //             storeReducer({
+    //                 type: GlobalStoreActionType.MARK_LIST_FOR_DELETION,
+    //                 payload: {},
+    //             });
+    //             async function deleteList(playlist) {
+    //                 response = await api.deletePlaylistById(playlist._id);
+    //                 store.loadIdNamePairs();
+    //             }
+    //             deleteList(playlist);
+    //         }
+    //     }
+    //     asyncDeletePlaylist(id);
+    // };
+
+
+
+    //ADDED This is likely to be the one we use
+    // store.markListForDeletion = function (id) {
+    //     storeReducer({
+    //         type: GlobalStoreActionType.MARK_LIST_FOR_DELETION,
+    //         payload: id
+    //     });
+    //     store.showDeleteListModal();
+    // }
+    store.deletePlaylist = function (id) {
+        async function asyncProcessDelete(id) {
+            console.log('Calling store.playlist with id: ' + id);
+            let response = await api.deletePlaylistById(id);
+            if (response.data.success) {
+                store.loadIdNamePairs();
+                store.history.push("/");
+            }
+        }
+        asyncProcessDelete(id);
+        console.log('deletePlaylist succeeded.')
+    }
+    // store.deleteMarkedList = function() {
+    //     store.deleteList(store.listMarkedForDeletion);
+    //     store.hideDeleteListModal();
+    // }
+    // store.showDeleteListModal = function() {
+    //     let modal = document.getElementById("delete-modal");
+    //     modal.classList.add("is-visible");
+    // }
+    // store.hideDeleteListModal = function() {
+    //     let modal = document.getElementById("delete-modal");
+    //     modal.classList.remove("is-visible");
+    // }
+
+
 
     // THIS GIVES OUR STORE AND ITS REDUCER TO ANY COMPONENT THAT NEEDS IT
     return { store, storeReducer };

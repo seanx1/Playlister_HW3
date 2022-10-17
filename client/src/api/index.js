@@ -27,12 +27,20 @@ export const getPlaylistById = (id) => api.get(`/playlist/${id}`)
 
 //ADDED
 export const createPlaylist = (payload) => api.post('playlist', payload);
+export const updatePlaylistById = (id, payload) => api.put(`/playlist/${id}`, payload);
+export const deletePlaylistById = (id) => api.delete(`/playlist/${id}`);
 
+
+//Commenting, apis is a list of all the calls we can currently make to our backend
 const apis = {
     getAllPlaylists,
     getPlaylistPairs,
     getPlaylistById,
     createPlaylist,
+    updatePlaylistById,
+    deletePlaylistById,
 }
 
+// updatePlaylistById,
+// deletePlaylistById,
 export default apis
