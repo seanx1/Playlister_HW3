@@ -391,7 +391,7 @@ export const useGlobalStore = () => {
         }
 
         //Update the playlist after the songs have been moved locally.
-        async function asyncMoveSong(playlist) {
+        async function asyncUpdateData(playlist) {
             console.log("Started async move song")
             let response = await api.updatePlaylistById(playlist._id, playlist);
             if (response.data.success) {
@@ -403,7 +403,7 @@ export const useGlobalStore = () => {
             }
         }
 
-        asyncMoveSong(list);
+        asyncUpdateData(list);
         console.log("Finished asyncMoveSong")
     };
 
@@ -425,6 +425,25 @@ export const useGlobalStore = () => {
     //     }
     //     store.updateList();
     // }
+
+    store.addSong = (title, artist, youTubeId) => {
+        console.log("Adding song")
+        const list = store.currentList;
+        const song = { title: title, artist: artist, youTubeId: youTubeId };
+        console.log("Adding song with: [" + title + ", " + artist + ", " + youTubeId + "]");
+        list.songs.push(song);
+        async function asyncUpdateData(playlist) {
+            let response = await api.updatePlaylistById(playlist._id, playlist);
+            if (response.data.success) {
+                console.log(response.data.playlist);
+                storeReducer({
+                    type: GlobalStoreActionType.SET_CURRENT_LIST,
+                    payload: response.data.playlist,
+                });
+            }
+        }
+        asyncUpdateData(list);
+    };
 
     // THIS GIVES OUR STORE AND ITS REDUCER TO ANY COMPONENT THAT NEEDS IT
     return { store, storeReducer };
