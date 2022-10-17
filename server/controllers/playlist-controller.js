@@ -136,7 +136,9 @@ updatePlaylistById = async (req, res) => {
         });
     }
 
+    console.log("Trying to update by Id.")
     Playlist.findOne({ _id: req.params.id }, (err, Playlist) => {
+        // console.log("Got into the findOne.")
         if (err) {
             return res.status(404).json({
                 err,
@@ -268,6 +270,7 @@ module.exports = {
     getPlaylists,
     getPlaylistPairs,
     getPlaylistById,
+    updatePlaylistById,
     deletePlaylistById,
 }
 

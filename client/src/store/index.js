@@ -369,7 +369,62 @@ export const useGlobalStore = () => {
     //     modal.classList.remove("is-visible");
     // }
 
+    store.moveSong = (start, end) => {
+        //Shift everything between the start and end point and add to the end
+        const list = store.currentList;
+        if (start < end) {
+            let temp = list.songs[start];
+            console.log("start < end: " + temp);
+            for (let i = start; i < end; i++) {
+                console.log(i + 1);
+                list.songs[i] = list.songs[i + 1];
+            }
+            list.songs[end] = temp;
+        } else if (start > end) {
+            let temp = list.songs[start];
+            console.log("start > end: " + temp);
+            for (let i = start; i > end; i--) {
+                console.log(i - 1);
+                list.songs[i] = list.songs[i - 1];
+            }
+            list.songs[end] = temp;
+        }
 
+        //Update the playlist after the songs have been moved locally.
+        async function asyncMoveSong(playlist) {
+            console.log("Started async move song")
+            let response = await api.updatePlaylistById(playlist._id, playlist);
+            if (response.data.success) {
+                console.log(response.data.playlist);
+                storeReducer({
+                    type: GlobalStoreActionType.SET_CURRENT_LIST,
+                    payload: response.data.playlist,
+                });
+            }
+        }
+
+        asyncMoveSong(list);
+        console.log("Finished asyncMoveSong")
+    };
+
+    // store.moveSong = function(start, end) {
+    //     if (start < end) {
+    //         let temp = store.currentList.songs[start];
+    //         console.log(temp);
+    //         for (let i = start; i < end; i++) {
+    //             store.currentList.songs[i] = store.currentList.songs[i + 1];
+    //         }
+    //         store.currentList.songs[end] = temp;
+    //     }
+    //     else if (start > end) {
+    //         let temp = store.currentList.songs[start];
+    //         for (let i = start; i > end; i--) {
+    //             store.currentList.songs[i] = store.currentList.songs[i - 1];
+    //         }
+    //         store.currentList.songs[end] = temp;
+    //     }
+    //     store.updateList();
+    // }
 
     // THIS GIVES OUR STORE AND ITS REDUCER TO ANY COMPONENT THAT NEEDS IT
     return { store, storeReducer };
