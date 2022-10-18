@@ -30,7 +30,10 @@ function ListCard(props) {
     const handleDeleteList = (event) => {
         let id = event.target.id.substring('delete-list-'.length);
         console.log('The ID of the card to be deleted is: ' + id);
-        store.deletePlaylist(id);
+        store.markListForDeletion(id);
+        // store.deletePlaylist(id); // We don't actually want this to delete right after, we want a modal to pop up
+        // store.markListForDeletion(_id);
+        // store.deleteList(id);
         event.stopPropagation();
     };
 

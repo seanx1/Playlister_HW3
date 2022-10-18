@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import SongCard from './SongCard.js'
 import { GlobalStoreContext } from '../store'
+import DeleteModal from './DeleteModal.js';
 /*
     This React component lets us edit a loaded list, which only
     happens when we are on the proper route.

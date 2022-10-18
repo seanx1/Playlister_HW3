@@ -81,7 +81,8 @@ export const useGlobalStore = () => {
                     idNamePairs: store.idNamePairs,
                     currentList: null,
                     newListCounter: store.newListCounter,
-                    listNameActive: false
+                    listNameActive: false,
+                    listMarkedForDeletion: payload
                 });
             }
             // UPDATE A LIST
@@ -335,16 +336,18 @@ export const useGlobalStore = () => {
     // };
 
 
-
     //ADDED This is likely to be the one we use
-    // store.markListForDeletion = function (id) {
-    //     storeReducer({
-    //         type: GlobalStoreActionType.MARK_LIST_FOR_DELETION,
-    //         payload: id
-    //     });
-    //     store.showDeleteListModal();
-    // }
-    store.deletePlaylist = function (id) {
+    store.markListForDeletion = function (id) {
+        console.log("Playlist with id:" + id + "is marked for deletion")
+        const toBeSent = id + '';
+        storeReducer({
+            type: GlobalStoreActionType.MARK_LIST_FOR_DELETION,
+            payload: toBeSent
+        });
+        store.showDeleteListModal();
+    }
+    store.deleteList = function (id) {
+        console.log("deleteList was called")
         async function asyncProcessDelete(id) {
             console.log('Calling store.playlist with id: ' + id);
             let response = await api.deletePlaylistById(id);
@@ -356,18 +359,23 @@ export const useGlobalStore = () => {
         asyncProcessDelete(id);
         console.log('deletePlaylist succeeded.')
     }
-    // store.deleteMarkedList = function() {
-    //     store.deleteList(store.listMarkedForDeletion);
-    //     store.hideDeleteListModal();
-    // }
-    // store.showDeleteListModal = function() {
-    //     let modal = document.getElementById("delete-modal");
-    //     modal.classList.add("is-visible");
-    // }
-    // store.hideDeleteListModal = function() {
-    //     let modal = document.getElementById("delete-modal");
-    //     modal.classList.remove("is-visible");
-    // }
+    store.deleteMarkedList = function() {
+        console.log("deleteMarkedList was called which will call store.deleteList")
+        console.log("The value of store.listMarkedForDeletion is : " + store.listMarkedForDeletion)
+        store.deleteList(store.listMarkedForDeletion);
+        store.hideDeleteListModal();
+    }
+    store.showDeleteListModal = function() {
+        console.log("Beginning to try to show delete list modal")
+        let modal = document.getElementById("delete-modal");
+        modal.classList.add("is-visible");
+        console.log("Finished showing delete list modal")
+    }
+    store.hideDeleteListModal = function() {
+        console.log("hideDeleteListModal was called")
+        let modal = document.getElementById("delete-modal");
+        modal.classList.remove("is-visible");
+    }
 
     store.moveSong = (start, end) => {
         //Shift everything between the start and end point and add to the end
