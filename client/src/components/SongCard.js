@@ -6,6 +6,7 @@ function SongCard(props) {
     const [isDragging, setIsDragging] = useState(false);
     const [draggedTo, setDraggedTo] = useState(false);
 
+    //ADDED to handle moving songs
     const handleDragStart = (event) => {
         console.log("Drag Start")
         event.dataTransfer.setData('song', event.target.id);
@@ -47,6 +48,37 @@ function SongCard(props) {
         event.stopPropagation();
     };
 
+    //ADDED in order to handle editing  a song
+    const handleEditSong = (event) => {
+        event.preventDefault();
+        // store.deleteSong(index);
+        //let id = event.target.id.substring('delete-list-'.length);
+        console.log('The index of the song to be edited is: ' + index);
+        // store.markSongForDeletion(index);
+        // store.deleteSong(index);
+
+        //Where we will handle the editing of the song
+        const showEditSongModal = () => {
+            let modal = document.getElementById('edit-song-modal');
+            modal.classList.add('is-visible');
+        };
+        store.markSong(index);
+        showEditSongModal();
+
+        event.stopPropagation();
+    };
+
+    //ADDED in order to handle deleting a song
+    const handleDeleteSong = (event) => {
+        event.preventDefault();
+        // store.deleteSong(index);
+        //let id = event.target.id.substring('delete-list-'.length);
+        console.log('The index of the song to be deleted is: ' + index);
+        store.markSongForDeletion(index);
+        // store.deleteSong(index);
+        event.stopPropagation();
+    };
+
     const { song, index } = props;
     let cardClass = "list-card unselected-list-card";
     return (
@@ -61,6 +93,7 @@ function SongCard(props) {
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             draggable='true'
+            onDoubleClick={handleEditSong}
         >
             {index + 1}.
             <a
@@ -74,11 +107,14 @@ function SongCard(props) {
                 id={"remove-song-" + index}
                 className="list-card-button"
                 value={"\u2715"}
-                onClick={() => {
-                    console.log(store.currentList);
-                }}
+                // onClick={() => {
+                //     console.log(store.currentList);
+                //     handleDeleteSong
+                // }}
+                onClick={handleDeleteSong}
             />
         </div>
+
     );
 }
 

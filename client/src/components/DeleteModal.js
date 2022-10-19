@@ -96,6 +96,7 @@ function DeleteModal() {
     const { store } = useContext(GlobalStoreContext);
     let name = "";
     if (store.currentList) {
+        console.log("The name of the playlist for delete modal is: " + store.currentList.name)
         name = store.currentList.name;
     }
     function handleDeleteList(event) {

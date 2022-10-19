@@ -46,6 +46,7 @@ function ListCard(props) {
         let newActive = !editActive;
         if (newActive) {
             store.setIsListNameEditActive();
+            // store.setListNameActive();
         }
         setEditActive(newActive);
     }
