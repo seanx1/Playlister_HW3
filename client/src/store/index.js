@@ -321,59 +321,6 @@ export const useGlobalStore = () => {
         asyncCreateNewList();
     }
 
-    // THIS FUNCTION ADDS A NEW PLAYLIST
-    //   store.createNewList = () => {
-    //     const playlist = { name: 'untitled', songs: [] };
-    //     const asyncCreateNewList = async () => {
-    //       const response = await api.createPlaylist(playlist);
-    //       if (response.data.success) {
-    //         let playlist = response.data.playlist;
-    //         if (response.data.success) {
-    //           storeReducer({
-    //             type: GlobalStoreActionType.SET_CURRENT_LIST,
-    //             payload: playlist,
-    //           });
-    //           store.history.push('/playlist/' + playlist._id);
-    //         }
-    //       }
-    //     };
-    //     asyncCreateNewList();
-    //   }; 
-
-    // store.deletePlaylist = (id) => {
-    //     // GET THE LIST
-    //     async function asyncDeletePlaylist(id) {
-    //         let response = await api.getPlaylistById(id);
-    //         let playlist = response.data.playlist;
-    //         if (response.data.success) {
-    //             storeReducer({
-    //                 type: GlobalStoreActionType.MARK_LIST_FOR_DELETION,
-    //                 payload: {},
-    //             });
-    //             async function deleteList(playlist) {
-    //                 response = await api.deletePlaylistById(playlist._id);
-    //                 if (response.data.success) {
-    //                     async function getListPairs(playlist) {
-    //                         response = await api.getPlaylistPairs();
-    //                         if (response.data.success) {
-    //                             let pairsArray = response.data.idNamePairs;
-    //                             storeReducer({
-    //                                 type: GlobalStoreActionType.CHANGE_LIST_NAME,
-    //                                 payload: {
-    //                                     idNamePairs: pairsArray,
-    //                                     playlist: playlist,
-    //                                 },
-    //                             });
-    //                         }
-    //                     }
-    //                     getListPairs(playlist);
-    //                 }
-    //             }
-    //             deleteList(playlist);
-    //         }
-    //     }
-    //     asyncDeletePlaylist(id);
-    // };
 
     // store.deletePlaylist = (id) => {
     //     // GET THE LIST
@@ -498,25 +445,6 @@ export const useGlobalStore = () => {
         console.log("Finished asyncMoveSong")
     };
 
-    // store.moveSong = function(start, end) {
-    //     if (start < end) {
-    //         let temp = store.currentList.songs[start];
-    //         console.log(temp);
-    //         for (let i = start; i < end; i++) {
-    //             store.currentList.songs[i] = store.currentList.songs[i + 1];
-    //         }
-    //         store.currentList.songs[end] = temp;
-    //     }
-    //     else if (start > end) {
-    //         let temp = store.currentList.songs[start];
-    //         for (let i = start; i > end; i--) {
-    //             store.currentList.songs[i] = store.currentList.songs[i - 1];
-    //         }
-    //         store.currentList.songs[end] = temp;
-    //     }
-    //     store.updateList();
-    // }
-
     //ADDED This is likely to be the one we use to edit song 
     store.markSong = (index) => {
         storeReducer({
@@ -585,24 +513,6 @@ export const useGlobalStore = () => {
                 });
             }
         }
-
-        // //Update the playlist after the songs have been moved locally.
-        // async function asyncUpdateData(playlist) {
-        //     console.log("Started async delete song")
-        //     let response = await api.updatePlaylistById(playlist._id, playlist);
-        //     if (response.data.success) {
-        //         console.log(response.data.playlist);
-        //         storeReducer({
-        //             type: GlobalStoreActionType.SET_CURRENT_LIST,
-        //             // payload: response.data.playlist,
-        //             payload: playlist
-        //         });
-        //     }
-        // }
-
-        // asyncUpdateData(list);
-        // console.log("Finished asyncMoveSong")
-        // asyncProcessDelete(index, playlist);
         asyncProcessDelete(list)
         console.log('deleteSong succeeded.')
     }
@@ -623,23 +533,6 @@ export const useGlobalStore = () => {
         let modal = document.getElementById("delete-song-modal");
         modal.classList.remove("is-visible");
     }
-
-    // store.deleteSong = (idx) => {
-    //     const list = store.currentList;
-    //     list.songs.splice(idx, 1);
-    //     async function asyncUpdatePlaylist(playlist) {
-    //         let response = await api.updatePlaylistById(playlist._id, playlist);
-    //         if (response.data.success) {
-    //             console.log(response.data.playlist);
-    //             storeReducer({
-    //                 type: GlobalStoreActionType.SET_CURRENT_LIST,
-    //                 payload: response.data.playlist,
-    //             });
-    //         }
-    //     }
-
-    //     asyncUpdatePlaylist(list);
-    // };
 
     // THIS GIVES OUR STORE AND ITS REDUCER TO ANY COMPONENT THAT NEEDS IT
     return { store, storeReducer };
