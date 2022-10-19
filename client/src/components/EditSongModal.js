@@ -69,7 +69,9 @@ const EditSongModal = () => {
         let modal = document.getElementById('edit-song-modal');
         modal.classList.remove('is-visible');
         let editedSong = { title: title, artist: artist, youTubeId: youTubeId };
-        store.editSong(editedSong);
+        console.log("Edited song in hide edit song modal is: " + editedSong)
+        // store.editSong(editedSong);
+        store.addEditSongTransaction(editedSong)
     };
     const handleEditSong = () => {
         // let editedSong = { title: title, artist: artist, youTubeId: youTubeId };

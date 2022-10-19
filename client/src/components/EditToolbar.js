@@ -18,7 +18,8 @@ function EditToolbar() {
 
     //ADDED This to handle adding song
     const handleAddSong = (event) => {
-        store.addSong('Untitled', 'Unknown', 'dQw4w9WgXcQ');
+        // store.addSong('Untitled', 'Unknown', 'dQw4w9WgXcQ');
+        store.addAddSongTransaction();
         event.stopPropagation();
     };
     

@@ -1,6 +1,14 @@
 import { createContext, useState } from 'react'
 import jsTPS from '../common/jsTPS'
 import api from '../api'
+
+//ADDED Transactions
+// import MoveItem_Transaction from '../transactions/MoveItem_Transaction'
+// import UpdateItem_Transaction from '../transactions/UpdateItem_Transaction'
+import AddSong_Transaction from '../transactions/AddSong_Transaction'
+import MoveSong_Transaction from '../transactions/MoveSong_Transaction'
+import EditSong_Transaction from '../transactions/EditSong_Transaction'
+import DeleteSong_Transaction from '../transactions/DeleteSong_Transaction'
 export const GlobalStoreContext = createContext({});
 /*
     This is our global data store. Note that it uses the Flux design pattern,
@@ -172,7 +180,7 @@ export const useGlobalStore = () => {
             let response = await api.getPlaylistById(id);
             if (response.data.success) {
                 // let playlist = response.data.playlists;
-                if(!newName) {
+                if (!newName) {
                     newName = response.data.playlist.name;
                 }
                 console.log("Now it seems to make sure that the playlist name stays the same if no changes were made. The newName is now: " + newName)
@@ -210,6 +218,7 @@ export const useGlobalStore = () => {
             type: GlobalStoreActionType.CLOSE_CURRENT_LIST,
             payload: {}
         });
+        tps.clearAllTransactions();
     }
 
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
@@ -257,13 +266,20 @@ export const useGlobalStore = () => {
         tps.doTransaction();
     }
 
+    // store.canUndo = () => {
+    //     return tps.hasTransactionToUndo();
+    // };
+    // store.canRedo = () => {
+    //     return tps.hasTransactionToRedo();
+    // };
+
     // THIS FUNCTION ENABLES THE PROCESS OF EDITING A LIST NAME
-    store.setlistNameActive = function () {
-        storeReducer({
-            type: GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE,
-            payload: null
-        });
-    }
+    // store.setlistNameActive = function () {
+    //     storeReducer({
+    //         type: GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE,
+    //         payload: null
+    //     });
+    // }
 
     //ADDED This function creates a playlist Copied and pasted from change list name
     // store.createNewList = function () {
@@ -384,7 +400,7 @@ export const useGlobalStore = () => {
         modal.classList.remove("is-visible");
     }
 
-    //ADDED
+    //ADDED to add song
     store.addSong = (title, artist, youTubeId) => {
         console.log("Adding song")
         const list = store.currentList;
@@ -403,6 +419,11 @@ export const useGlobalStore = () => {
             }
         }
         asyncUpdateData(list);
+    };
+
+    store.addAddSongTransaction = () => {
+        let transaction = new AddSong_Transaction(store);
+        tps.addTransaction(transaction);
     };
 
     //ADDED
@@ -445,6 +466,26 @@ export const useGlobalStore = () => {
         console.log("Finished asyncMoveSong")
     };
 
+    store.addMoveSongTransaction = (initOldSongIndex, initNewSongIndex) => {
+        const transaction = new MoveSong_Transaction(
+            store,
+            initOldSongIndex,
+            initNewSongIndex
+        );
+        console.log("Adding a move song transaction")
+        tps.addTransaction(transaction);
+    };
+
+    // store.addMoveSongTransaction = function (start, end) {
+    //     let transaction = new MoveSong_Transaction(store, start, end);
+    //     tps.addTransaction(transaction);
+    // }
+    // store.addUpdateSongTransaction = function (index, newText) {
+    //     let oldText = store.currentList.items[index];
+    //     let transaction = new UpdateSong_Transaction(store, index, oldText, newText);
+    //     tps.addTransaction(transaction);
+    // }
+
     //ADDED This is likely to be the one we use to edit song 
     store.markSong = (index) => {
         storeReducer({
@@ -475,6 +516,23 @@ export const useGlobalStore = () => {
         asyncUpdatePlaylist(list);
     };
 
+    store.addEditSongTransaction = (editedSong) => {
+        const uneditedSong = store.currentList.songs[store.markedForChanges];
+        const uneditedSongClone = {
+            title: uneditedSong.title,
+            artist: uneditedSong.artist,
+            youTubeId: uneditedSong.youTubeId,
+        };
+        console.log("Unedited song is: " + uneditedSong.name)
+        console.log("Edited song is: " + editedSong.name)
+        const transaction = new EditSong_Transaction(
+            store,
+            store.markedForChanges,
+            uneditedSongClone,
+            editedSong
+        );
+        tps.addTransaction(transaction);
+    };
 
     //ADDED This is likely to be the one we use to remove song 
     store.markSongForDeletion = function (index) {

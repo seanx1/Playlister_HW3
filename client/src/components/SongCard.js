@@ -29,6 +29,7 @@ function SongCard(props) {
     };
 
     const handleDrop = (event) => {
+        event.stopPropagation();
         console.log("Handle Drop")
         event.preventDefault();
         let target = event.target;
@@ -43,8 +44,13 @@ function SongCard(props) {
 
         console.log("The actual parsed target ID for handle drop is: " + targetId);
         console.log("The actual parsed source ID for handle drop is: " + sourceId);
+        console.log("Adding move song transaction")
+        store.addMoveSongTransaction(parseInt(sourceId), parseInt(targetId));
+        console.log("Added move song transaction")
         // ASK THE MODEL TO MOVE THE DATA
-        store.moveSong(parseInt(sourceId), parseInt(targetId));
+        // console.log("The actual parsed target ID for handle drop is: " + targetId);
+        // console.log("The actual parsed source ID for handle drop is: " + sourceId);
+        // store.moveSong(parseInt(sourceId), parseInt(targetId));
         event.stopPropagation();
     };
 
