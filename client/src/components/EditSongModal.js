@@ -71,7 +71,9 @@ const EditSongModal = () => {
         let editedSong = { title: title, artist: artist, youTubeId: youTubeId };
         console.log("Edited song in hide edit song modal is: " + editedSong)
         // store.editSong(editedSong);
-        store.addEditSongTransaction(editedSong)
+        // store.addEditSongTransaction(editedSong)
+        store.editSong(editedSong);
+
     };
     const handleEditSong = () => {
         // let editedSong = { title: title, artist: artist, youTubeId: youTubeId };
